@@ -13,7 +13,7 @@ public:
         cursor = 0;
     }
     ~Stack() {
-        delete(s);
+        if (s != nullptr) delete[] s;
     }
     bool isFull() {
         return n_ <= cursor;
