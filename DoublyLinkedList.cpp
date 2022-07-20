@@ -21,10 +21,7 @@ public:
     }
     bool next() {
         currentNode = currentNode->prev;
-        if (currentNode == endNode) {
-            return false;
-        }
-        return true;
+        return currentNode != endNode;
     }
     T& getCurrent() {
         return currentNode->key;
