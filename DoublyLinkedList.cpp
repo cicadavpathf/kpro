@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 using namespace std;
 
@@ -15,15 +16,20 @@ template<typename T>
 class NodeIterator
 {
 public:
-    NodeIterator(Node<T>* sentinel) {
-        currentNode = sentinel;
-        endNode = sentinel;
+    NodeIterator(Node<T>* startNode, Node<T>* nil) {
+        currentNode = startNode;
+        endNode = nil;
     }
-    bool next() {
-        currentNode = currentNode->prev;
-        return currentNode != endNode;
+    void next() {
+        currentNode = currentNode->next;
     }
-    T& getCurrent() {
+    bool peek() {
+        return currentNode == endNode;
+    }
+    bool last() {
+        return !peek() && currentNode->next == endNode;
+    }
+    T& getValue() {
         return currentNode->key;
     }
 private:
@@ -37,7 +43,7 @@ class DoublyLinkedList
 public:
     DoublyLinkedList();
     ~DoublyLinkedList();
-    void insert(T key);
+    void add(T key);
     void remove(T key);
     void removeFirst();
     void removeLast();
@@ -65,7 +71,7 @@ DoublyLinkedList<T>::~DoublyLinkedList() {
 }
 
 template<typename T>
-void DoublyLinkedList<T>::insert(T key) {
+void DoublyLinkedList<T>::add(T key) {
     Node<T>* node = new Node<T>();
     node->key = key;
     node->prev = nil;
@@ -77,7 +83,7 @@ void DoublyLinkedList<T>::insert(T key) {
 
 template<typename T>
 void DoublyLinkedList<T>::remove(T key) {
-    auto node = findNode(key);
+    Node<T>* node = findNode(key);
     if (node == nullptr || node == nil) return;
     node->prev->next = node->next;
     node->next->prev = node->prev;
@@ -96,34 +102,58 @@ Node<T>* DoublyLinkedList<T>::findNode(T key) {
 
 template<typename T>
 void DoublyLinkedList<T>::removeFirst() {
-    Node<T>* first = nil->prev;
+    Node<T>* first = nil->next;
     if (first == nullptr || first == nil) return;
-    first->prev->next = nil;
-    nil->prev = first->prev;
+    nil->next = first->next;
+    first->next->prev = nil;
     delete first;
 }
 
 template<typename T>
 void DoublyLinkedList<T>::removeLast() {
-    Node<T>* last = nil->next;
+    Node<T>* last = nil->prev;
     if (last == nullptr || last == nil) return;
-    nil->next = last->next;
-    last->next->prev = nil;
+    last->prev->next = nil;
+    nil->prev = last->prev;
     delete last;
 }
 
 template<typename T>
 NodeIterator<T> DoublyLinkedList<T>::getIterator() {
-    return NodeIterator(nil);
+    return NodeIterator(nil->next, nil);
 }
 
 int main() {
+    int n;
+    cin >> n;
+
     DoublyLinkedList<int> list;
-    list.insert(10);
-    list.insert(11);
-    list.insert(-9);
-    auto ite = list.getIterator();
-    while(ite.next()) {
-        cout << ite.getCurrent() << endl;
+
+    string cmd;
+    int x;
+
+    for (int i = 0; i < n; i++) {
+        cin >> cmd;
+        if (cmd == "deleteFirst") {
+            list.removeFirst();
+            continue;
+        } else if (cmd == "deleteLast") {
+            list.removeLast();
+            continue;
+        }
+
+        cin >> x;
+        if (cmd == "insert") {
+            list.add(x);
+        } else if (cmd == "delete") {
+            list.remove(x);
+        }
     }
+
+    auto ite = list.getIterator();
+    while (!ite.last()) {
+        cout << ite.getValue() << " ";
+        ite.next();
+    }
+    cout << ite.getValue() << endl;
 }
