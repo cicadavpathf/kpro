@@ -1,22 +1,4 @@
-21
-insert 1
-insert 2
-insert 3
-insert 4
-insert 5
-insert 6
-insert 7
-insert 8
-delete 5
-delete 7
-insert 9
-deleteLast
-deleteLast
-insert 10
-deleteFirst
-deleteFirst
-delete 8
-insert 7
-insert 8
-delete 4
-insert 1
+10
+5 6 7 8 9 10 1 2 3 4
+7
+100 11 5 6 1 12 33
