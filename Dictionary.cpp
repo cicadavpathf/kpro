@@ -12,7 +12,7 @@ constexpr size_t COMMAND_SIZE = 6;
 最初、制限時間超過(TLE)に引っかかって苦戦した。
 std::stringとsmart pointerを捨て、cstringを使用してコード改造したが、全く解決できなかった。
 真の原因はgetRawKeyで重みpを使用していなかったこと。
-重みを乗せないと、ACGとGCAが同じ数値になってしまうため、hash値が被る回数が増えてしまうため、
+重みを乗せないと、ACGとGCAが同じ数値になってしまうため、hash値が被ってしまい
 計算量が爆増していた。
 */
 
