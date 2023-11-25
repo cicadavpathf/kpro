@@ -1,2 +1,5 @@
 .vscode/
-*.exe
+*
+!*.cpp
+!*.cc
+!*.h
